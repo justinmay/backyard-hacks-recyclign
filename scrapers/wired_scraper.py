@@ -40,11 +40,10 @@ image_links = []
 for product in product_image_link:
     image_links.append(product['src'])
 print(len(names))
-print(len(description))
-print(len(links))
-print(len(prices))
-print(len(image__links))
+print(len(descriptions))
+print(len(links[:19]))
+print(len(image_links[:19]))
 ### putting it all together ### 
-#df = pd.DataFrame(np.array([names,description,links,prices,image_links]),
-#                   columns=['names', 'description', 'links','prices','image_links'])
-#df.to_csv("wired_data.csv")
+d = {'names': names, 'description': descriptions, 'links': links[:19], 'image_links': image_links[:19]}
+df = pd.DataFrame(data=d)
+df.to_csv("wired_data.csv")
