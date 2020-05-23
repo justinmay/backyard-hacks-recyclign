@@ -45,4 +45,4 @@ print(len(image_links))
 ### putting it all together ### 
 d = {'names': names, 'prices': prices, 'links': links, 'image_links': image_links}
 df = pd.DataFrame(data=d)
-df.to_csv("timbuktu_data.csv")
+df.to_csv("timbuktu_TAT_data.csv")
