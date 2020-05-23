@@ -17,6 +17,7 @@
     "nodemon": "^2.0.4"
   },
   "dependencies": {
+    "csv-parser": "^2.3.2",
     "express": "^4.17.1"
   }
 }
