@@ -6,15 +6,27 @@
   "version": "0.0.1",
 
   "browser_action": {
-    "default_popup": "index.html",
-    "default_title": "Open the popup"
   },
   "icons": {
     "16": "logo-small.png",
     "48": "logo-small.png",
     "128": "logo-small.png"
   },
-  "content_security_policy": "script-src 'self' 'sha256-YxEmMIisDGtsdXDePwZjIyQtxOauZP32CMwbJTPuWZg='; object-src 'self'",
+  "background": {
+    "scripts": ["app/background.js"]
+  },
+  "content_scripts" : [
+    {
+      "matches": ["https://www.amazon.com/*"],
+      "css": ["/static/css/main.css", "/static/css/content.css"],
+      "js": ["/static/js/0.js", "/static/js/content.js", "/static/js/runtime-content.js", "/static/js/main.js", "/static/js/runtime-main.js"]
+    }
+  ],
+  "content_security_policy": "script-src 'self' 'sha256-ZVMeJRJ+ggrNFvgFQx9u2UXfui1H/wkxzqvehaeJ0VE='; object-src 'self'",
   "permissions": [
+    "tabs",
+    "notifications",
+    "http://*/",
+    "https://*/"
   ]
 }
