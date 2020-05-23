@@ -45,6 +45,7 @@ app.get('/product', function(req, res) {
             },
         }).then(function (response) {
             console.log(response); //got a response ! TODO: parse the response and respond to the user 
+            
         });
     }
 });
