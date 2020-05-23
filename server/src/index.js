@@ -34,6 +34,8 @@ app.get('/product', function(req, res) {
         // GET request for remote image in node.js
         const product_description_re = /(?<=class="field field-name-title-field field-type-text field-label-hidden")((.|\n)*?)(?=<\/h2>)/g;
         const name_re = /(?<=">)((.|\n)*?)(?=<\/)/g;
+        const price_re = /(?<=span> \$)((.|\n)*?)(?=<\/div>)/g;
+        const image_link_re = /<img[^>]+src="([^">]+)"[^>]width="270" height="305/g;
         axios({
             method: 'get',
             url: 'https://www.ecopromotionsonline.com/products',
@@ -47,13 +49,23 @@ app.get('/product', function(req, res) {
         }).then(function (response) {
             //console.log(response); //got a response ! TODO: parse the response and respond to the user 
             const product_description = response.data.match(product_description_re);
+            const names = [];
+            const descriptions = [];
             product_description.forEach(e => {
                 console.log(e);
                 e = e.match(name_re)[0].split("|");
                 const name = e[0].trim();
                 const description = e.length > 1 ? e[1].trim() : "";
-                console.log("### ", name, description);
+                names.push(name);
+                descriptions.push(description);
             });
+            const prices = response.data.match(price_re);
+            let image_links = response.data.match(image_link_re);
+            image_links = image_links.map(e=> {
+                return e.split('"')[1]
+            });
+            
+            console.log(image_links);
         });
     }
 });
