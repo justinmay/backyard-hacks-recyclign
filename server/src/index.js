@@ -32,7 +32,8 @@ app.get('/product', function(req, res) {
         // search ecopromotionsonline website
         const search_url = `https://www.ecopromotionsonline.com/products?search_api_views_fulltext=${stemmed_name}&field_category=All&items_per_page=24`;
         // GET request for remote image in node.js
-        
+        const product_description_re = /(?<=class="field field-name-title-field field-type-text field-label-hidden")((.|\n)*?)(?=<\/h2>)/g;
+        const name_re = /(?<=">)((.|\n)*?)(?=<\/)/g;
         axios({
             method: 'get',
             url: 'https://www.ecopromotionsonline.com/products',
@@ -44,8 +45,15 @@ app.get('/product', function(req, res) {
                 }
             },
         }).then(function (response) {
-            console.log(response); //got a response ! TODO: parse the response and respond to the user 
-            
+            //console.log(response); //got a response ! TODO: parse the response and respond to the user 
+            const product_description = response.data.match(product_description_re);
+            product_description.forEach(e => {
+                console.log(e);
+                e = e.match(name_re)[0].split("|");
+                const name = e[0].trim();
+                const description = e.length > 1 ? e[1].trim() : "";
+                console.log("### ", name, description);
+            });
         });
     }
 });
