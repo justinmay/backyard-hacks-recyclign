@@ -51,11 +51,14 @@ app.get('/product', function(req, res) {
             const product_description = response.data.match(product_description_re);
             const names = [];
             const descriptions = [];
+            const product_links = [];
             product_description.forEach(e => {
-                console.log(e);
+                const product_link = "https://www.ecopromotionsonline.com" + e.split('"')[1]; 
+                product_links.push(product_link);
                 e = e.match(name_re)[0].split("|");
                 const name = e[0].trim();
                 const description = e.length > 1 ? e[1].trim() : "";
+                
                 names.push(name);
                 descriptions.push(description);
             });
@@ -64,8 +67,8 @@ app.get('/product', function(req, res) {
             image_links = image_links.map(e=> {
                 return e.split('"')[1]
             });
-            
-            console.log(image_links);
+
+            console.log(product_links);
         });
     }
 });
