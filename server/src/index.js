@@ -1,5 +1,6 @@
 import express from "express";
 import {getData} from './data';
+import axios from "axios";
 
 /**
  * importing the data
@@ -28,7 +29,23 @@ app.get('/product', function(req, res) {
         const response_data = {products: product_data[stemmed_name]}
         res.status(200).json(response_data)
     } else {
-        // search krishna's website
+        // search ecopromotionsonline website
+        const search_url = `https://www.ecopromotionsonline.com/products?search_api_views_fulltext=${stemmed_name}&field_category=All&items_per_page=24`;
+        // GET request for remote image in node.js
+        
+        axios({
+            method: 'get',
+            url: 'https://www.ecopromotionsonline.com/products',
+            data:{
+                params:{
+                    search_api_views_fulltext:stemmed_name,
+                    field_category:"All",
+                    items_per_page:24
+                }
+            },
+        }).then(function (response) {
+            console.log(response); //got a response ! TODO: parse the response and respond to the user 
+        });
     }
 });
 
