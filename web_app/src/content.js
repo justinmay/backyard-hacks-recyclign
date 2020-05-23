@@ -1,5 +1,5 @@
 /* src/content.js */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import "./content.css";
 
@@ -8,34 +8,74 @@ const getTitle = () => {
     const title = product.textContent
     console.log('asdfqwerzxcvasdfqwer')
     console.log(title)
-    fetch()
     return title || '' //we also have to fetch here to get results from database
-    
 }
 
-const data = { title: title };
-const apiEndopoint = 'ngrok' // backend should be here
-try{
-  const response = await fetch(apiEndpoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  })
-  const data = await response.json()
-  console.log('Success:', data);
-} catch(error) {
-  console.error('Error:', error);
+const fetchData = async (title) => {
+  const apiEndpoint = `ngrok/product?productName=${title}` // backend should be here
+
+  try{
+    const response = await fetch(apiEndpoint)
+    const result = await response.json()
+    console.log('Success:', result);
+    return result
+  } catch(error) {
+    console.error('Error:', error);
+  }
 }
 
 const ContentReact = () => {
-  const [data, setData] = useState(null);
-  
-  return (
+  // const [data, setData] = useState(null)
+  const title = getTitle()
+  const data = [
+    {
+      name: title,
+      description: 'The material Couch uses is typically deadstock, meaning it’s unused and in new condition, but was made long ago by another company. When Couch finds it gathering dust in a warehouse, it buys it and turns it into guitar straps, camera straps, belts, wallets, handbags, sunglasses cases, and more. The product line is always changing and has included Army truck seat belts, upholstery intended for 1970s VW Beetles, and trippy patterned cloth once destined for 1960s furniture.',
+      price: 64,
+      recycled_percent: '',
+      link: 'https://cna.st/p/2hc5hQAHwfj8VPYK7Qk9GwUbxRSgyWyQM4qy5vcfAxpwRRvuUDvTuzBSVWMcABiMN8d5QibMtBuqC44K8YaakBiSVtrKgT394DMKx8PtkMd?cid=5cb63f20b9c1161402febad5',
+      image_link: 'https://media.wired.com/photos/5eb2018d0371f8083eb2ceb8/master/w_400%2Cc_limit/Gear-GreenPolly-trash-bags-SOURCE-GreenPolly.jpg'
+    },
+    {
+      name: "Rothy's Copper Flat",
+      description: "They're lightweight, comfortable, and come in a bewildering variety of shapes, colors, and sizes. The knit uppers are made of 100 percent post-consumer plastic bottles, and the foam components are made from other recycled shoes. The shoeboxes are also made from 85 percent recycled materials, and—it should go without saying—the boxes are 100 percent recyclable, too.",
+      price: 125,
+      recycled_percent: '',
+      link: "https://cna.st/p/2hc5hQAHwfj8VPYK7Qk9GwUbxRSgyWyQM4qy5vcfAxkgdb5i4DEU4sewPs56yYsZBZAuAqGZPjrGz5w9qmZngJtHXDffDwz9EeHvTCV1QLC?cid=5cb63f20b9c1161402febad5",
+      image_link: "https://media.wired.com/photos/5cba5d589ef3721114271289/master/w_1600%2Cc_limit/Rothy's-Copper-Flat.jpg"
+    }
+  ]
+
+ 				
+  // const newData = await getData(title)
+  // setData(newData)
+
+  // useEffect(() => {
+  //   // Create an scoped async function in the hook
+  //   async function getData() {
+  //     return await fetchData();
+  //   }    // Execute the created function directly
+  //   let newData = getData();
+  //   setData(newData)
+  // }, []);
+
+  const listItems = data.map((row) => {
+    const { name, description, price, recycled_percent, link, image_link } = row
+    return (
+      <li className="flex-container">
+        <div><img src={image_link} alt={name}/></div>
+        <div>{name}</div>
+        <div>{description}</div>
+        <div>{price}</div>
+        <div>{recycled_percent}</div>
+        <div><a href={link}>Find {name}</a></div>
+      </li>
+    )
+  })
+
+  return ( 
     <div className={'react-extension'}>
-        <p>Hello From React Extension!</p>
-        <p>{getTitle()}</p> 
+      <ul>{listItems}</ul>
     </div>
   )
 }
