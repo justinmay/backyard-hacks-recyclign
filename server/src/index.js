@@ -19,8 +19,10 @@ var PORT = 3000;
 
 app.get('/product', function(req, res) {
     const raw_name = req.query.productName.trim();
+    const keyword = req.query.keyword ? req.query.keyword.trim() : raw_name;
     console.log(" --- NEW GET REQUEST --- ")
-    console.log("searching for: ", raw_name)
+    console.log("keyword: ", keyword);
+    console.log("searching for: ", raw_name);
     // stem the name
     let stemmed_names = raw_name.split(" ");
     console.log(" stemmed names before: ", stemmed_names)
@@ -45,9 +47,9 @@ app.get('/product', function(req, res) {
 
     // check for hit in local data 
     if (!found) {
-        console.log("Not found in database, searching ecopromos for: ", raw_name)
+        console.log("Not found in database, searching ecopromos for: ", keyword)
         // search ecopromotionsonline website
-        const search_url = `https://www.ecopromotionsonline.com/products?search_api_views_fulltext=${raw_name}&field_category=All&items_per_page=24`;
+        const search_url = `https://www.ecopromotionsonline.com/products?search_api_views_fulltext=${keyword}&field_category=All&items_per_page=24`;
         // GET request for remote image in node.js
         const product_description_re = /(?<=class="field field-name-title-field field-type-text field-label-hidden")((.|\n)*?)(?=<\/h2>)/g;
         const name_re = /(?<=">)((.|\n)*?)(?=<\/)/g;
@@ -56,12 +58,10 @@ app.get('/product', function(req, res) {
         axios({
             method: 'get',
             url: 'https://www.ecopromotionsonline.com/products',
-            data:{
-                params:{
-                    search_api_views_fulltext:raw_name,
-                    field_category:"All",
-                    items_per_page:24
-                }
+            params:{
+                search_api_views_fulltext:keyword,
+                field_category:"All",
+                items_per_page:24
             },
         }).then(function (response) {
             console.log("Valid response from ecopromos");
@@ -85,7 +85,7 @@ app.get('/product', function(req, res) {
                 return e.split('"')[1]
             });
 
-            const response_limit = Math.min([names.length,descriptions.length,prices.length,product_links.length,image_links.length]);
+            const response_limit = 6;
             const ret = {products: []};
             for(let i = 0;i < response_limit; i++) {
                 const product = {
