@@ -58,7 +58,7 @@ const ContentReact = () => {
     <div className={'react-extension'}>
       <ul className={'modal-wrapper'}>
         <li className='header'>
-          <p><span class='title'>New Leaf</span> <span class='caption'> - Recommending Green Alternatives for Everyday Purchases</span></p>
+          <img src="https://webstockreview.net/images/clipart-leaf-cartoon-4.png" alt="leaf" class="logoBoy"/><p><span class='title'>New Leaf</span> <span class='caption'> - Recommending Green Alternatives for Everyday Purchases</span></p>
         </li>
         {data ?
         data.map((row) => {
