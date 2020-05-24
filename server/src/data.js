@@ -11,7 +11,7 @@ export function getData() {
         let product = {
             name: row['product'],
             description: row['description'],
-            price: +row['price'],
+            price: row['price'],
             recycled_percent: row['% recycled'],
             link: row['link'],
             image_link: row['image link']

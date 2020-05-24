@@ -1,6 +1,7 @@
 import express from "express";
 import {getData} from './data';
 import axios from "axios";
+import stemmer from 'stemmer';
 
 /**
  * importing the data
@@ -17,20 +18,36 @@ var app = express();
 var PORT = 3000;
 
 app.get('/product', function(req, res) {
-    const raw_name = req.query.productName;
-    console.log(raw_name);
-
+    const raw_name = req.query.productName.trim();
+    console.log(" --- NEW GET REQUEST --- ")
+    console.log("searching for: ", raw_name)
     // stem the name
-    const stemmed_name = raw_name;
+    let stemmed_names = raw_name.split(" ");
+    console.log(" stemmed names before: ", stemmed_names)
+    stemmed_names = stemmed_names.map(e => {
+        return stemmer(e.trim());
+    });
+    console.log(" stemmed names: ", stemmed_names)
+    let found = false;
+    for(const index in stemmed_names) {
+        const stemmed_name = stemmed_names[index];
+        console.log("searching for ", stemmed_name)
+        if (stemmed_name in product_data) {
+            // return object
+            console.log("Found in Database with product: ", stemmed_name)
+            const response_data = {products: product_data[stemmed_name]}
+            res.setHeader("Access-Control-Allow-Origin", "*");
+            res.status(200).json(response_data);
+            found = true;
+            break;
+        }
+    }
 
     // check for hit in local data 
-    if (stemmed_name in product_data) {
-        // return object
-        const response_data = {products: product_data[stemmed_name]}
-        res.status(200).json(response_data)
-    } else {
+    if (!found) {
+        console.log("Not found in database, searching ecopromos for: ", raw_name)
         // search ecopromotionsonline website
-        const search_url = `https://www.ecopromotionsonline.com/products?search_api_views_fulltext=${stemmed_name}&field_category=All&items_per_page=24`;
+        const search_url = `https://www.ecopromotionsonline.com/products?search_api_views_fulltext=${raw_name}&field_category=All&items_per_page=24`;
         // GET request for remote image in node.js
         const product_description_re = /(?<=class="field field-name-title-field field-type-text field-label-hidden")((.|\n)*?)(?=<\/h2>)/g;
         const name_re = /(?<=">)((.|\n)*?)(?=<\/)/g;
@@ -41,13 +58,13 @@ app.get('/product', function(req, res) {
             url: 'https://www.ecopromotionsonline.com/products',
             data:{
                 params:{
-                    search_api_views_fulltext:stemmed_name,
+                    search_api_views_fulltext:raw_name,
                     field_category:"All",
                     items_per_page:24
                 }
             },
         }).then(function (response) {
-            //console.log(response); //got a response ! TODO: parse the response and respond to the user 
+            console.log("Valid response from ecopromos");
             const product_description = response.data.match(product_description_re);
             const names = [];
             const descriptions = [];
@@ -68,7 +85,7 @@ app.get('/product', function(req, res) {
                 return e.split('"')[1]
             });
 
-            const response_limit = 3;
+            const response_limit = Math.min([names.length,descriptions.length,prices.length,product_links.length,image_links.length]);
             const ret = {products: []};
             for(let i = 0;i < response_limit; i++) {
                 const product = {
@@ -81,9 +98,11 @@ app.get('/product', function(req, res) {
                 }
                 ret["products"].push(product)
             }
+            res.setHeader("Access-Control-Allow-Origin", "*");
             res.status(200).json(ret);
-        });
-        
+        }).catch(e => {
+            console.log("error: ",e);
+        })
     }
 });
 
