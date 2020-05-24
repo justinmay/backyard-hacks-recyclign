@@ -68,7 +68,7 @@ const ContentReact = () => {
               <div className='image'><img src={image_link} alt={''}/></div>
               <div className='name'><a href={link}>{name}</a></div>
               <div className='description'><p className='desc'>{description}</p></div>
-              <div className='price'><p>${price}</p></div>
+              <div className='jahaan_price'><p>${price}</p></div>
             </li>
           )
         }) :

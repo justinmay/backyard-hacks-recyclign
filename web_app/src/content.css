@@ -44,9 +44,11 @@
   height: 8vh;
   align-items: center;
   justify-content: flex-start;
-  margin-left: 22px;
-  margin-right: 22px;
-  margin-top: 6px;
+  padding-left: 22px;
+  padding-right: 22px;
+  padding-top: 6px;
+  z-index: 300;
+  box-shadow: 0px 10px 13px -6px rgba(0,0,0,.1);
 }
 
 .title {
@@ -69,6 +71,7 @@
 .logoBoy {
   width: 5vw;
   margin-right: 2vh;
+  object-fit: contain;
 }
 
 .name {
@@ -86,7 +89,7 @@
   width: 0px;  /* Remove scrollbar space */
   background: transparent;  /* Optional: just make scrollbar invisible */
 }
-.price {
+.jahaan_price {
   width: 10vw;
   height: 20vh;
 }
