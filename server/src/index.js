@@ -68,8 +68,22 @@ app.get('/product', function(req, res) {
                 return e.split('"')[1]
             });
 
-            console.log(product_links);
+            const response_limit = 3;
+            const ret = {products: []};
+            for(let i = 0;i < response_limit; i++) {
+                const product = {
+                    name: names[i],
+                    description: descriptions[i],
+                    price: +prices[i],
+                    recycled_percent: undefined,
+                    link: product_links[i],
+                    image_link: image_links[i]
+                }
+                ret["products"].push(product)
+            }
+            res.status(200).json(ret);
         });
+        
     }
 });
 
