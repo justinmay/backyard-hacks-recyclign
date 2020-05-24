@@ -52,9 +52,14 @@ const ContentReact = () => {
   useEffect(() => {
     fetchData(title)
       .then(result => {
+        let products = result['products']
+        if (products === undefined || products.length === 0) {
+            products = null
+        }
+    
         console.log(`result: ${result}`)
         console.log(`result: ${result['products']}`)
-        setData(result['products'])
+        setData(products)
       })
       .catch(error => console.log(error));
   }, [title]);
@@ -74,25 +79,31 @@ const ContentReact = () => {
 
   return ( 
     <div className={'react-extension'}>
-      <ul className={'modal-wrapper'}>{data &&
+      <ul className={'modal-wrapper'}>
+        <li className='header'>
+          <p><span class='title'>New Leaf</span> <span class='caption'> - Recommending Green Alternatives for Everyday Purchases</span></p>
+        </li>
+        {data ?
         data.map((row) => {
           const { name, description, price, link, image_link } = row
           return (
             <li className="flex-container">
-              <div><img src={image_link} alt={name}/></div>
-              <div><a href={link}>{name}</a></div>
-              <div>{description}</div>
-              <div>${price}</div>
+              <div className='image'><img src={image_link} alt={''}/></div>
+              <div className='name'><a href={link}>{name}</a></div>
+              <div className='description'><p>{description}</p></div>
+              <div className='price'><p>${price}</p></div>
             </li>
           )
-        })
+        }) :
+        <li className="error">
+          <p className="errorMessage">Sorry! We couldn't find any matching eco-friendly products :(</p>
+        </li>
       }</ul>
     </div>
   )
 }
 
 const app = document.createElement('div');
-
 
 app.style.display = "block";
 // eslint-disable-next-line no-undef

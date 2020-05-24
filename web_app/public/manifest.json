@@ -1,16 +1,16 @@
 {
   "manifest_version": 2,
 
-  "name": "Recycling Recommender",
-  "description": "Get alternative products made of recycled materials",
+  "name": "New Leaf",
+  "description": "Get alternative products made of recycled and eco-friendly materials",
   "version": "0.0.1",
 
   "browser_action": {
   },
   "icons": {
-    "16": "logo-small.png",
-    "48": "logo-small.png",
-    "128": "logo-small.png"
+    "16": "leaf.png",
+    "48": "leaf.png",
+    "128": "leaf.png"
   },
   "background": {
     "scripts": ["app/background.js"]
