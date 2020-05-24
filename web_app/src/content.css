@@ -72,13 +72,9 @@
 
 .description {
   width: 45vw;
-  height: 15vh;
+  height: 19vh;
   overflow: scroll;
-}
-
-.desc {
-  margin-top: 47px;
-  margin-bottom: 10px;
+  margin-left: 5px;
 }
 
 .price {

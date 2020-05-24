@@ -11,10 +11,17 @@ const getTitle = () => {
     return title || '' //we also have to fetch here to get results from database
 }
 
-const fetchData = async (title) => {
+const getKeyWords = () => {
+    const searchElt = document.getElementById("twotabsearchtextbox")
+    const searchVal = searchElt.value
+    console.log(`value: ${searchVal}`)
+    return searchVal || ''
+}
+
+const fetchData = async (title, keyword) => {
   const apiEndpoint = `https://b4275166.ngrok.io/product` // backend should be here
   const url = new URL(apiEndpoint)
-  const params = {productName: title}
+  const params = {productName: title, keyword: keyword}
   url.search = new URLSearchParams(params).toString();
 
   try{
@@ -29,10 +36,11 @@ const fetchData = async (title) => {
 
 const ContentReact = () => {
   const [data, setData] = useState(null)
-  const title = getTitle()
+  const title = getTitle() || null
+  const keyword = getKeyWords() || null
   
   useEffect(() => {
-    fetchData(title)
+    fetchData(title, keyword)
       .then(result => {
         let products = result['products']
         if (products === undefined || products.length === 0) {
