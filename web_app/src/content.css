@@ -1,6 +1,7 @@
 /* src/content.css */
 .react-extension {
     position: fixed;
+    z-index: 200;
     top: 0;
     left: 0;
     width: 100vw;
@@ -13,10 +14,11 @@
 }
 
 .modal-wrapper {
-  border-radius: 25px;
+  border-radius: 15px;
   background-color: #f1f1f1;
   box-shadow: 0 4px 8px 0 rgba(255, 255, 255, 0.507), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  height: 70vh;
+  max-height: 85vh;
+  min-height: 17vh;
   overflow: scroll;
 }
 
@@ -43,6 +45,7 @@
   align-items: center;
   justify-content: flex-start;
   margin-left: 22px;
+  margin-right: 22px;
   margin-top: 6px;
 }
 
@@ -73,6 +76,11 @@
   overflow: scroll;
 }
 
+.desc {
+  margin-top: 47px;
+  margin-bottom: 10px;
+}
+
 .price {
   width: 10vw;
   height: 20vh;
@@ -85,7 +93,7 @@
 }
 
 .errorMessage {
-  font-size: 20px;
+  font-size: 21px;
 }
 
 img {
