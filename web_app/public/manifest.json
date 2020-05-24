@@ -24,9 +24,5 @@
   ],
   "content_security_policy": "script-src 'self' 'sha256-ZVMeJRJ+ggrNFvgFQx9u2UXfui1H/wkxzqvehaeJ0VE='; object-src 'self'",
   "permissions": [
-    "tabs",
-    "notifications",
-    "http://*/",
-    "https://*/"
   ]
 }
