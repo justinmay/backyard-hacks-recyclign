@@ -69,24 +69,34 @@ app.get('/product', function(req, res) {
             const names = [];
             const descriptions = [];
             const product_links = [];
-            product_description.forEach(e => {
-                const product_link = "https://www.ecopromotionsonline.com" + e.split('"')[1]; 
-                product_links.push(product_link);
-                e = e.match(name_re)[0].split("|");
-                const name = e[0].trim();
-                const description = e.length > 1 ? e[1].trim() : "";
-                
-                names.push(name);
-                descriptions.push(description);
-            });
-            const prices = response.data.match(price_re);
+            if (product_description !== undefined && product_description !== null) {
+                product_description.forEach(e => {
+                    const product_link = "https://www.ecopromotionsonline.com" + e.split('"')[1]; 
+                    product_links.push(product_link);
+                    e = e.match(name_re)[0].split("|");
+                    const name = e[0].trim();
+                    const description = e.length > 1 ? e[1].trim() : "";
+                    
+                    names.push(name);
+                    descriptions.push(description);
+                });
+            }
+            
+            let prices = response.data.match(price_re);
+            if (prices === null) {
+                prices = []
+            }
             let image_links = response.data.match(image_link_re);
-            image_links = image_links.map(e=> {
-                return e.split('"')[1]
-            });
-
-            const response_limit = 6;
+            if (image_links !== null) {
+                image_links = image_links.map(e=> {
+                    return e.split('"')[1]
+                });
+            } else {
+                image_links = [];
+            }
             const ret = {products: []};
+            const sizes = [names.length,descriptions.length,prices.length,product_links.length,image_links.length]
+            const response_limit = Math.min(...sizes);
             for(let i = 0;i < response_limit; i++) {
                 const product = {
                     name: names[i],
