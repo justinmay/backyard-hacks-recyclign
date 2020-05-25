@@ -19,7 +19,7 @@ const getKeyWords = () => {
 }
 
 const fetchData = async (title, keyword) => {
-  const apiEndpoint = `https://b4275166.ngrok.io/product` // backend should be here
+  const apiEndpoint = `https://new-leaf-backyard-hacks.herokuapp.com/product` // backend should be here
   const url = new URL(apiEndpoint)
   const params = {productName: title, keyword: keyword}
   url.search = new URLSearchParams(params).toString();
