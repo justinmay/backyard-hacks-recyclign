@@ -6,15 +6,14 @@ import "./content.css";
 const getTitle = () => { 
     const product = document.getElementById("productTitle");
     const title = product.textContent
-    console.log('asdfqwerzxcvasdfqwer')
-    console.log(title)
-    return title || '' //we also have to fetch here to get results from database
+    console.log(`product title: ${title}`)
+    return title || ''
 }
 
 const getKeyWords = () => {
     const searchElt = document.getElementById("twotabsearchtextbox")
     const searchVal = searchElt.value
-    console.log(`value: ${searchVal}`)
+    console.log(`keyword: ${searchVal}`)
     return searchVal || ''
 }
 
@@ -27,7 +26,6 @@ const fetchData = async (title, keyword) => {
   try{
     const response = await fetch(url)
     const result = await response.json()
-    console.log('Success:', result);
     return result
   } catch(error) {
     console.error('Error:', error);
@@ -46,13 +44,10 @@ const ContentReact = () => {
         if (products === undefined || products.length === 0) {
             products = null
         }
-    
-        console.log(`result: ${result}`)
-        console.log(`result: ${result['products']}`)
         setData(products)
       })
       .catch(error => console.log(error));
-  }, [title]);
+  }, [keyword, title]);
 
   return ( 
     <div className={'react-extension'}>
